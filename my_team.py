@@ -137,7 +137,7 @@ class OffensiveReflexAgent(ReflexCaptureAgent):
         my_pos = my_state.get_position()
         carried_food = my_state.num_carrying  # Number of food items the agent is carrying
         total_food = len(self.get_food(game_state).as_list())  # Food available on the map
-        quarter_food = max(1, total_food // 4)  # 1/4 of the total food, at least 1
+        return_food = max(1, total_food // 5)  # 1/5 of the total food, at least 1
 
         # Determine the team's border (midline of the map)
         boundary_x = (game_state.data.layout.width // 2) - (1 if self.red else 0)
@@ -146,7 +146,7 @@ class OffensiveReflexAgent(ReflexCaptureAgent):
         min_dist_to_border = min([self.get_maze_distance(my_pos, p) for p in border_positions]) # Distance from agent to border
 
         # If the agent carries enough food, or is close to the border with some food, return home
-        if carried_food >= quarter_food or (carried_food >= 2 and min_dist_to_border <= 2):
+        if carried_food >= return_food or (carried_food >= 2 and min_dist_to_border <= 2):
             # Select the action that moves the agent closest to the border
             best_action = min(actions, key=lambda a: self.get_maze_distance(
                 self.get_successor(game_state, a).get_agent_state(self.index).get_position(),
